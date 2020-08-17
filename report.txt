@@ -1,0 +1,75 @@
+Summary:
+1. Explain your algorithm for the simulation of the presidential election by mail and why you design it this way?
+
+My algorithm for the simulation of the presidential election consisted of a strategic
+decision to use the POSIX library in C in order to parallelize the random number 
+generation code. I designed it this way because random number generation is the most computationally expensive operation in the program.
+
+My Algorithm:
+1. Parse .csv and .txt files to retireve all necessary input
+2. calculate the amount of actual voters in each state
+3. choose a voting agency ... I chose Iowa
+4. calculate the distance from the agency in each state
+5. Mail all outgoing ballots to any individual who is registered, and keep track of cost
+6. use eight threads to parrallelize the voting simulation
+7. Aggregate the electoral and popular vote
+
+
+2. What are the factors you have considered in the design?
+I considered what operations are more expensive than others, for example random generation is more expensive than assignment operations. I also considered the parrallelization method with the least amount of overhead. In this case the choice was the POSIX library, I also chose to write the program in C because it is the lowest level programming language that I know. 
+
+
+Election Result:
+NOTE: Election Results(state and country) can be found in stdout (terminal).
+
+Instructions to retrieve results:
+1) use cd to enter the 'electVote' directory
+2) type "make" using the Makefile for your convenience
+	- be sure that the POSIX library is installed (not to worry if you are on an ubuntu machine with gcc)
+3) the 'make' command will create an exectuable called './out' it takes no arguments
+4) type "./out" to see the election results
+5) type "make clean" to remove all executable files ...
+
+Performance Report:  
+
+POSIX
+Average: 5572 ms
+Min    : 5398 ms
+Max    : 5985 ms 
+
+Sequential
+Average: 1486 ms
+Min    : 1406 ms
+Max    : 1729 ms  
+
+It is concerning that the sequential code is faster than the pthread version,
+it is likely that there is a bug involving repition in the pthread version, or
+hopefully it is due to the fact that I am working in a virtual machine.
+I used eight threads. 
+
+
+
+
+
+
+Discussion Questions (one paragraph for each question):
+• Briefly explain what you would do to make the simulation more “realistic”. If you design your simulation with any additional dataset or modeling work, it is considered as bonus
+	
+	In order to make the simulation more realistic, it would be necessary to research the turn_out_rate variable in more depth. I know that younger people are less likely to vote in elections, because they may not be able to take time off of work to go vote. I am also aware that older people may have a tendency to vote republican over democrat. It would also be very important to have the turn_out_rate vary according to which state is voting. I am sure that some states have larger turn_out_rates than others. Another interesting add-on may be to add an independent candidate. I know for a fact that the independent candidate was very controversial in the election of 2000, Al Gore vs. George W. Bush. This addition would add another level of duplicity to the simulation.
+
+
+
+• Briefly explain what you would do to minimize the cost/time of a national mail-in election.
+
+	In order to minimize the cost/time of a national mail-in election, I would place the central agency in zone 4. This minimizes the distant to any other state. However this is actually a naive approach. It would be optimal to place the agency in a place that minimizes the mailing costs for the most people. For example if Wyoming is far away from the agency, that is probably not catastrophic due to its low population. Beyond this approach if each zone had an agency that was capable of producing ballots, than all mailing transactions would be intra-zone transactions thus drastically reducing cost and time.
+
+• Explain what you would do differently if you have a cluster of 50 nodes to perform the simulation and why.
+	
+	If a cluster of fifty nodes was available to me, than that would have changed my algorithm drastically, because nodes within a cluster can communicate with each-other to perform a set of operations. The advantage to clusters would be the decrease in downage time. For example threads are designed to only complete the work that they have been assigned, if a cluster of nodes were available than there would be more freedom as to what node could do what work. In addition the scalabiltiy of the project would dramatically increase,
+
+
+
+
+
+
+
